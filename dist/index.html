@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="main">
+      
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" data-file-name="data1" href="/dist/">BOLIGFILTER</a>
+            </li>
+          </ul>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link nav-data" data-file-name="data1" href="/dist/#JSON1">JSON1</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-data" data-file-name="data2" href="/dist/#JSON2">JSON2</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-data" data-file-name="data3" href="/dist/#JSON3">JSON3</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- End Navigation -->
+
+      <div class="flex-container">
+        <div class="row">
+          <div class="col-4">
+            <!-- The div element for filters -->
+            <div class="filters">
+              <h2>Filtrer på kortet</h2>
+              <div id="">
+                <button class="btn" data-filter="1"> Villa</button>
+                <button class="btn" data-filter="3"> Andelsbolig</button>
+                <button class="btn" data-filter="4"> Ejerlejlighed</button>
+                <button class="btn" data-filter="8"> Villalejlighed</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-8">
+            <!--The div element for the map -->
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script async defer src = 'https://maps.googleapis.com/maps/api/js?key=[YOUR_KEY]&callback=initMap'></script>
+    <script>
+      let map;
+      let data;
+
+      // Get all menu buttons
+      var navLink = document.getElementsByClassName("nav-data");
+      // Add onclick function to the menu buttons
+      for (let i = 0; i < navLink.length; i++) {
+        navLink[i].addEventListener("click", btnClicked);
+      }
+      // Onclick callback function for the menu buttons
+      function btnClicked(e) {
+        data = e.target.getAttribute("data-file-name");
+        initMap(data);
+      }
+
+      // Get all filter buttons
+      var filterBtn = document.getElementsByClassName("btn");
+      // Add onclick function to the filter buttons
+      for (let i = 0; i < filterBtn.length; i++) {
+        filterBtn[i].addEventListener("click", filterClicked);
+      }
+      // Onclick callback function for the filter buttons
+      function filterClicked(e) {
+        let filterData = e.target.getAttribute("data-filter");
+        console.log(data)
+        initFilteredMap(data, filterData);
+      }
+
+      function initMap(file) {
+        var fileName = '';
+
+        if (file != null) {
+          fileName = file;
+        } else {
+          fileName = 'data1';
+        }
+
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: {
+            lat: -34.397,
+            lng: 150.644
+          },
+          zoom: 13
+        });
+
+        // Get files from server
+        let request = new XMLHttpRequest();
+        request.open('GET', fileName + '.json', true);
+        request.onload = function () {
+          // Convert JSON data to an object
+          let objects = JSON.parse(this.response);
+          var objLatLng = {};  
+          var objTitle = ''; 
+
+          // Iterate through objects
+          for (var i = 0; i < objects.length; i++) {
+            
+            // Get object title
+            objTitle = objects[i].propertyType.name + ' in ' + objects[i].county.name;
+
+            // Get object lat/lng
+            objLatLng = {lat: objects[i].latLon.lat, lng: objects[i].latLon.lon};
+
+            // Create a marker on the map for each object
+            var marker = new google.maps.Marker({
+              position: objLatLng,
+              map: map,
+              title: objTitle
+            });
+
+          }
+          // Change the center of the map
+          map.setCenter(objLatLng);
+        }    
+        request.send();
+      }
+
+      function initFilteredMap(file, filter) {
+        var fileName = '';
+        var filterId = '';
+
+        if (file != null) {
+          fileName = file;
+        } else {
+          fileName = 'data1';
+        }
+
+        if (filter != null) {
+          filterId = filter;
+        } else {
+          filterId = '';
+        }
+
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: {
+            lat: -34.397,
+            lng: 150.644
+          },
+          zoom: 13
+        });
+
+        // Get files from server
+        let request = new XMLHttpRequest();
+        request.open('GET', fileName + '.json', true);
+        request.onload = function () {
+          // Convert JSON data to an object
+          let objFiltered = JSON.parse(this.response);
+          var objLatLng = {};  
+          var objTitle = ''; 
+          var objTypeId = '';
+
+          // Iterate through objects
+          for (var i = 0; i < objFiltered.length; i++) {
+
+            // Get object property type id
+            objTypeId = objFiltered[i].propertyType.propertyTypeId;
+
+            if (filterId != '' && objTypeId == filterId) {
+              // Get object title
+              objTitle = objFiltered[i].propertyType.name + ' in ' + objFiltered[i].county.name;
+
+              // Get object lat/lng
+              objLatLng = {lat: objFiltered[i].latLon.lat, lng: objFiltered[i].latLon.lon};
+
+              // Create a marker on the map for each object
+              var marker = new google.maps.Marker({
+                position: objLatLng,
+                map: map,
+                title: objTitle
+              });
+            }
+          }
+          // Change the center of the map
+          map.setCenter(objLatLng);
+        }    
+        request.send();
+      }
+    </script>
+  <script src="bundle.js"></script></body>
+</html>

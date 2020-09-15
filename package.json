@@ -1,0 +1,31 @@
+{
+  "name": "valteck-demo",
+  "version": "1.0.0",
+  "description": "Test case for second job interview at Valteck",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "build": "webpack --mode development"
+  },
+  "keywords": [],
+  "author": "Kremena Dimitrova",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^4.3.0",
+    "dotenv-webpack": "^2.0.0",
+    "eslint": "^7.9.0",
+    "eslint-loader": "^4.0.2",
+    "html-webpack-plugin": "^4.4.1",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "load-google-maps-api": "^2.0.2"
+  }
+}
