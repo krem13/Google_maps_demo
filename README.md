@@ -1,6 +1,8 @@
 # maps_demo
 A small Google maps api app
 
+<img src="https://drive.google.com/file/d/1Gv61pi6_5xBk3q2uKKYY62qJAPTGf7MG/view?usp=sharing" alt="ScreenShot" style="max-width:100%;">
+
 NOTE! You have to add node_modules folder to the project and your oun Google API key in the script in src/index.html!
 
 # Start new webpack project
