@@ -1,5 +1,5 @@
 # maps_demo
-A small Google maps api app
+A small Google maps API app
 
 <img src="https://github.com/krem13/maps_demo/blob/master/maps_demo.jpg" alt="ScreenShot" style="max-width:80%;">
 
