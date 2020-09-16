@@ -1,7 +1,7 @@
 # maps_demo
 A small Google maps api app
 
-<img src="https://github.com/krem13/maps_demo/blob/master/Untitled%20drawing.jpg" alt="ScreenShot" style="max-width:100%;">
+<img src="https://github.com/krem13/maps_demo/blob/master/maps_demo.jpg" alt="ScreenShot" style="max-width:100%;">
 
 NOTE! You have to add node_modules folder to the project and your oun Google API key in the script in src/index.html!
 
