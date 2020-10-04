@@ -3,49 +3,58 @@
   <head>
     <title>Google Maps Demo</title>
     <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- CSS only -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   </head>
   <body>
-    <div class="main">
+    <main>
       
       <!-- Navigation -->
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" data-file-name="data1" href="/dist/">BOLIGFILTER</a>
+              <a class="nav-link nav-data" data-file-name="data1" href="/dist/">BOLIGFILTER</a>
             </li>
           </ul>
         </div>
         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link nav-data" data-file-name="data1" href="/dist/#JSON1">JSON1</a>
+              <a class="nav-link nav-data" data-file-name="data1" href="/dist/#Valby">Valby</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-data" data-file-name="data2" href="/dist/#JSON2">JSON2</a>
+              <a class="nav-link nav-data" data-file-name="data2" href="/dist/#Amager1">Amager1</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-data" data-file-name="data3" href="/dist/#JSON3">JSON3</a>
+              <a class="nav-link nav-data" data-file-name="data3" href="/dist/#Amager2">Amager2</a>
             </li>
           </ul>
         </div>
       </nav>
       <!-- End Navigation -->
 
-      <div class="flex-container">
+      <!-- Content -->
+      <div class="container">
         <div class="row">
           <div class="col-4">
             <!-- The div element for filters -->
             <div class="filters">
               <h2>Filtrer på kortet</h2>
-              <div id="">
+              <div id="type-filters">
                 <button class="btn" data-filter="1"> Villa</button>
                 <button class="btn" data-filter="3"> Andelsbolig</button>
                 <button class="btn" data-filter="4"> Ejerlejlighed</button>
                 <button class="btn" data-filter="8"> Villalejlighed</button>
+              </div><br>
+              <div style="display: none;">
+                <p>Zip code</p>
+                <form action=""> 
+                <input type="text" id="txt1" class="input-field" onkeyup="showHint(data, this.value)" >
+                </form>
+                <p style="visibility: hidden;">Suggestions: <span id="txtHint"></span></p>
               </div>
             </div>
           </div>
@@ -55,17 +64,18 @@
           </div>
         </div>
       </div>
+      <!-- End Content -->
 
-    </div>
+    </main>
 
     <!-- Scripts -->
-    <script async defer src = 'https://maps.googleapis.com/maps/api/js?key=[YOUR_KEY]]&callback=initMap'></script>
+    <script async defer src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC64lC6PdAW3ASEeRbBjjVg6TdtxL2Pcp4&callback=initMap'></script>
     <script>
       let map;
       let data;
 
       // Get all menu buttons
-      var navLink = document.getElementsByClassName("nav-data");
+      let navLink = document.getElementsByClassName("nav-data");
       // Add onclick function to the menu buttons
       for (let i = 0; i < navLink.length; i++) {
         navLink[i].addEventListener("click", btnClicked);
@@ -77,7 +87,7 @@
       }
 
       // Get all filter buttons
-      var filterBtn = document.getElementsByClassName("btn");
+      let filterBtn = document.getElementsByClassName("btn");
       // Add onclick function to the filter buttons
       for (let i = 0; i < filterBtn.length; i++) {
         filterBtn[i].addEventListener("click", filterClicked);
@@ -85,14 +95,13 @@
       // Onclick callback function for the filter buttons
       function filterClicked(e) {
         let filterData = e.target.getAttribute("data-filter");
-        console.log(data)
         initFilteredMap(data, filterData);
       }
 
       function initMap(file) {
-        var fileName = '';
+        let fileName = '';
 
-        if (file != null) {
+        if (file !== null) {
           fileName = file;
         } else {
           fileName = 'data1';
@@ -108,15 +117,16 @@
 
         // Get files from server
         let request = new XMLHttpRequest();
-        request.open('GET', fileName + '.json', true);
+        request.open('GET', 'data/' + fileName + '.json', true);
         request.onload = function () {
           // Convert JSON data to an object
           let objects = JSON.parse(this.response);
-          var objLatLng = {};  
-          var objTitle = ''; 
-
+          let objLatLng = {};  
+          let objTitle = ''; 
+          console.log(objects)
+          
           // Iterate through objects
-          for (var i = 0; i < objects.length; i++) {
+          for (let i = 0; i < objects.length; i++) {
             
             // Get object title
             objTitle = objects[i].propertyType.name + ' in ' + objects[i].county.name;
@@ -125,7 +135,7 @@
             objLatLng = {lat: objects[i].latLon.lat, lng: objects[i].latLon.lon};
 
             // Create a marker on the map for each object
-            var marker = new google.maps.Marker({
+            new google.maps.Marker({
               position: objLatLng,
               map: map,
               title: objTitle
@@ -138,10 +148,10 @@
         request.send();
       }
 
-      // This function is not finished yet!
+      // This function is not finished yet! Missing error handling
       function initFilteredMap(file, filter) {
-        var fileName = '';
-        var filterId = '';
+        let fileName = '';
+        let filterId = '';
 
         if (file != null) {
           fileName = file;
@@ -165,17 +175,17 @@
 
         // Get files from server
         let request = new XMLHttpRequest();
-        request.open('GET', fileName + '.json', true);
+        request.open('GET', 'data/' + fileName + '.json', true);
         request.onload = function () {
           // Convert JSON data to an object
           let objFiltered = JSON.parse(this.response);
-          var objLatLng = {};  
-          var objTitle = ''; 
-          var objTypeId = '';
+          let objLatLng = {};  
+          let objTitle = ''; 
+          let objTypeId = '';
 
           // Iterate through objects
-          for (var i = 0; i < objFiltered.length; i++) {
-
+          for (let i = 0; i < objFiltered.length; i++) {
+            
             // Get object property type id
             objTypeId = objFiltered[i].propertyType.propertyTypeId;
 
@@ -187,7 +197,7 @@
               objLatLng = {lat: objFiltered[i].latLon.lat, lng: objFiltered[i].latLon.lon};
 
               // Create a marker on the map for each object
-              var marker = new google.maps.Marker({
+              new google.maps.Marker({
                 position: objLatLng,
                 map: map,
                 title: objTitle

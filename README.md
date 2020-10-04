@@ -17,7 +17,7 @@ To integrate with webpack:
 https://github.com/philrmass/minimal-google-maps-api
 
 # Build
-npm run build
+npm start
 
 # HTTP server setup
 I used http-server:
