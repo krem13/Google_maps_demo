@@ -16,7 +16,7 @@ https://developers.google.com/maps/documentation/javascript/adding-a-google-map#
 To integrate with webpack:
 https://github.com/philrmass/minimal-google-maps-api
 
-# Build
+# Run
 npm start
 
 # HTTP server setup
