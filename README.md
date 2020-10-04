@@ -3,7 +3,7 @@ A small Google maps API app
 
 <img src="https://github.com/krem13/maps_demo/blob/master/maps_demo.jpg" alt="ScreenShot" style="max-width:80%;">
 
-NOTE! You have to add node_modules folder to the project and your oun Google API key in the script in src/index.html!
+NOTE! You have to add node_modules folder to the project and your oun Google API key in the script in src/index.html! Run npm install.
 
 # Start new webpack project
 https://webpack.js.org/guides/getting-started/
