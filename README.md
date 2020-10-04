@@ -7,6 +7,7 @@ A small Google maps API app
 NOTE! You have to add node_modules folder to the project and your oun Google API key in the script in src/index.html! <br />
 
 "<script async defer src = 'https://maps.googleapis.com/maps/api/js?key=[YOUR_KEY]&callback=initMap'></script>"
+
 <br />Download or clone the project from git. Change to the folder Google_maps_demo. 
 <br />To add node_modules run:
 <br />npm install
